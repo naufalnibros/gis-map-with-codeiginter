@@ -44,7 +44,7 @@
                               <tr>
                                   <td><?php echo $no;?></td>
                                   <td><?php echo $rute->namarute;?></td>
-                                  <td><?php echo $rute>keterangan;?></td>
+                                  <td><?php echo $rute->keterangan;?></td>
                                   <td>
                                       <button type="button" class="btn btn-sm btn-info" data-idrute="<?php echo $rute->id_rute;?>" name="editrute<?php echo $rute->id_rute;?>" id="editrute"><span class="glyphicon glyphicon-edit"></span></button>
                                       <button type="button" class="btn btn-sm btn-danger" data-idrute="<?php echo $rute->id_rute;?>" name="deleterute<?php echo $rute->id_rute;?>" id="deleterute"><span class="glyphicon glyphicon-trash"></span></button>
