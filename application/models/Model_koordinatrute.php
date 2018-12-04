@@ -1,42 +1,51 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
  
-class Model_koordinatrute extends CI_Model{
+class Model_koordinatrute extends CI_Model {
  
-    public function create($rute,$latitude,$longitude){
-        $data = array('rute_id' => $rute,
-        'latitude'=>$latitude,
-        'longitude'=>$longitude);
-        $query = $this->db->insert('koordinatrute', $data);
+    public function create(){
+        foreach ($this->cart->contents() as $koordinat) {
+            $data = array('id_rute' => $this->input->post('id_rute'),
+                'latitude'=>$koordinat['latitude'],
+                'longitude'=>$koordinat['longitude']);
+            $query = $this->db->insert('koordinatrute', $data);
+        }
         return $query;
     }
     public function getAll(){
-        $this->db->select('*');
-        $this->db->from('koordinatrute');
-        $this->db->join('rute', 'rute.id_rute = koordinatrute.rute_id');
-        $query = $this->db->get();
+        $query = $this->db->get('koordinatrute');//mengambil semua data koordinat rute
+        return $query;
+    }
+    public function getbyidrute($id){
+        $this->db->where('id_rute', $id);
+        $query = $this->db->get('koordinatrute');//mengambil semua data koordinat rute
         return $query;
     }
     public function read($id){
-        $this->db->select('*');
-        $this->db->from('koordinatrute');
-        $this->db->join('rute', 'rute.id_rute = koordinatrute.rute_id');
-        $this->db->where('id_koordinatrute', $id);
-        $query = $this->db->get();
+        $this->db->where('id_koordinatrute', $id);//mengambil data koordinat rute berdasarkan id_koordinatrute
+        $query = $this->db->get('koordinatrute');
         return $query;
     }
-    public function update($rute,$latitude,$longitude,$id){
-        $data = array('rute_id' => $rute,
-        'latitude'=>$latitude,
-        'longitude'=>$longitude);
-        $this->db->where('id_koordinatrute', $id);
-        $query = $this->db->update('koordinatrute',$data);
+    public function update(){
+        $data = array('id_rute'=>$this->input->post('id_rute'),
+            'latitude'=>$this->input->post('latitude'),
+            'longitude'=>$this->input->post('longitude'));
+        $this->db->where('id_koordinatrute', $this->input->post('id_koordinatrute'));//mengupdate berdasarkan id_koordinatrute
+        $query = $this->db->update('koordinatrute', $data);
         return $query;
     }
-    public function delete($id){
-        $this->db->where('id_koordinatrute', $id);
+    public function delete(){
+        $this->db->where('id_koordinatrute', $this->input->post('id_koordinatrute'));//menghapus berdasarkan id_koordinatrute
         $query = $this->db->delete('koordinatrute');
+        return $query;
+    }
+    public function deletebyidrute($id){
+        $this->db->where('id_rute', $id);//menghapus berdasarkan id_koordinatrute
+        $query = $this->db->delete('koordinatrutee');
         return $query;
     }
  
 }
+ 
+/* End of file model_koordinatrute.php */
+/* Location: ./application/models/model_koordinatrute.php */

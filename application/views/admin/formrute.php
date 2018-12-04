@@ -95,4 +95,79 @@
         $('#simpanrute').attr('disabled',false);
         $('#updaterute').attr('disabled',true);
     }
+    function updaterute() {
+        var datarute = {'namarute':$('#namarute').val(),
+        'keterangan':$('#keterangan').val(),
+        'id_rute':$('#id_rute').val()};console.log(datarute);
+        $.ajax({
+            url : '<?php echo site_url("admin/rute/update");?>',
+            data : datarute,
+            dataType : 'json',
+            type : 'POST',
+            success : function(data,status){
+                if (data.status!='error') {
+                    $('#daftarrute').load('<?php echo current_url()." #daftarrute > *";?>');
+                    resetrute();//form langsung dikosongkan pas selesai input data
+                }else{
+                    alert(data.msg);
+                }
+            },
+            error : function(x,t,m){
+                alert(x.responseText);
+            }
+        })
+    }
+    function editrute() {
+        var id = $(this).data('idrute');
+        var datarute = {'id_rute':id};console.log(datarute);
+        $('input[name=editrute'+id+']').attr('disabled',true);//biar ga di klik dua kali, maka di disabled
+        $.ajax({
+            url : '<?php echo site_url("admin/rute/edit");?>',
+            data : datarute,
+            dataType : 'json',
+            type : 'POST',
+            success : function(data,status){
+                if (data.status!='error') {
+                    $('input[name=editrute'+id+']').attr('disabled',false);//disabled di set false, karena transaksi berhasil
+                    $('#simpanrute').attr('disabled',true);
+                    $('#updaterute').attr('disabled',false);
+                    $.each(data.msg,function(k,v){
+                        $('#id_rute').val(v['id_rute']);
+                        $('#namarute').val(v['namarute']);
+                        $('#keterangan').val(v['keterangan']);
+                    })
+                }else{
+                    alert(data.msg);
+                    $('input[name=editrute'+id+']').attr('disabled',false);//disabled di set false, karena transaksi berhasil
+                }
+            },
+            error : function(x,t,m){
+                alert(x.responseText);
+                $('input[name=editrute'+id+']').attr('disabled',false);//disabled di set false, karena transaksi berhasil
+            }
+        })
+    }
+    function deleterute() {
+        if (confirm("Anda yakin akan menghapus data rute ini?")) {
+            var id = $(this).data('idrute');
+            var datarute = {'id_rute':id};console.log(datarute);
+            $.ajax({
+                url : '<?php echo site_url("admin/rute/delete");?>',
+                data : datarute,
+                dataType : 'json',
+                type : 'POST',
+                success : function(data,status){
+                    if (data.status!='error') {
+                        $('#daftarrute').load('<?php echo current_url()." #daftarrute > *";?>');
+                        resetrute();//form langsung dikosongkan pas selesai input data
+                    }else{
+                        alert(data.msg);
+                    }
+                },
+                error : function(x,t,m){
+                    alert(x.responseText);
+                }
+            })
+        }
+    }
 </script>
